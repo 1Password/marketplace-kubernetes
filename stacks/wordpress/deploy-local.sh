@@ -2,6 +2,8 @@
 
 set -e
 
+ROOT_DIR=$(git rev-parse --show-toplevel)
+
 # create namespace
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -14,7 +16,7 @@ EOF
 kubectl config set-context --current --namespace=wordpress
 
 # deploy wordpress
-kubectl apply -f https://raw.githubusercontent.com/digitalocean/marketplace-kubernetes/master/stacks/wordpress/yaml/wordpress.yaml
+kubectl apply -f "$ROOT_DIR"/stacks/wordpress/yaml/wordpress.yaml
 
 # ensure services are running
 kubectl get deployments -o custom-columns=NAME:.metadata.name | tail -n +2 | while read -r line
